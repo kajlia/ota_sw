@@ -72,7 +72,6 @@ void on_button_pushed(void *params)
 
 void simple_ota_example_task(void *pvParameter)
 {
-
 	xSemaphoreTake(otaSemaphore, portMAX_DELAY);
     ESP_LOGI(TAG, "Starting OTA example");
 
