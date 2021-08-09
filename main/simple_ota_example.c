@@ -69,7 +69,6 @@ void on_button_pushed(void *params)
 
 void simple_ota_example_task(void *pvParameter)
 {
-	ESP_LOGI("SW_VERSION", "version %d is running", sw_version);
 
 	xSemaphoreTake(otaSemaphore, portMAX_DELAY);
     ESP_LOGI(TAG, "Starting OTA example");
