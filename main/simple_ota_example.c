@@ -80,6 +80,10 @@ void simple_ota_example_task(void *pvParameter)
     };
 
     esp_err_t ret = esp_https_ota(&config);
+    const esp_partition_t *updatePartition = esp_ota_get_next_update_partition(NULL);
+	esp_app_desc_t updatePartitionDesc;
+	esp_ota_get_partition_description(updatePartition, &updatePartitionDesc);
+	printf("current firmware version: %s\n", updatePartitionDesc.version);
     if (ret == ESP_OK) {
         esp_restart();
     } else {
