@@ -111,9 +111,6 @@ void app_main(void)
     ESP_ERROR_CHECK(example_connect());
 
 #if CONFIG_EXAMPLE_CONNECT_WIFI
-    /* Ensure to disable any WiFi power save mode, this allows best throughput
-     * and hence timings for overall OTA operation.
-     */
     esp_wifi_set_ps(WIFI_PS_NONE);
 #endif // CONFIG_EXAMPLE_CONNECT_WIFI
 
