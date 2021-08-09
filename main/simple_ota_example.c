@@ -34,6 +34,8 @@ esp_app_desc_t runningPartitionDesc;
 static const char *TAG = "simple_ota_example";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 
+void simple_ota_example_task(void *pvParameter);
+
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
     switch (evt->event_id) {
@@ -64,6 +66,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 
 void on_button_pushed(void *params)
 {
+	xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
   xSemaphoreGiveFromISR(otaSemaphore, pdFALSE);
 }
 
@@ -92,6 +95,9 @@ void simple_ota_example_task(void *pvParameter)
 		} else {
 			ESP_LOGE(TAG, "Firmware upgrade failed");
 		}
+	}else{
+		printf("same versions\n");
+		vTaskDelete( NULL );
 	}
     while (1) {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -132,5 +138,5 @@ void app_main(void)
 
 	otaSemaphore = xSemaphoreCreateBinary();
 
-    xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
+//    xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
 }
