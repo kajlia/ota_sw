@@ -28,7 +28,7 @@
 
 SemaphoreHandle_t otaSemaphore;
 
-const int sw_version = 2;
+const int sw_version = 3;
 
 static const char *TAG = "simple_ota_example";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
