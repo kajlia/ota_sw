@@ -89,7 +89,7 @@ void simple_ota_example_task(void *pvParameter)
 	if(strcmp(runningPartitionDesc.version, updatePartitionDesc.version)!=0){
 		esp_err_t ret = esp_https_ota(&config);
 		if (ret == ESP_OK) {
-			//esp_restart();
+			esp_restart();
 		} else {
 			ESP_LOGE(TAG, "Firmware upgrade failed");
 		}
@@ -97,7 +97,6 @@ void simple_ota_example_task(void *pvParameter)
     while (1) {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
-
 }
 
 void app_main(void)
