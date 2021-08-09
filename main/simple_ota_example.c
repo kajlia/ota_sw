@@ -29,6 +29,7 @@
 SemaphoreHandle_t otaSemaphore;
 
 const int sw_version = 3;
+esp_app_desc_t runningPartitionDesc;
 
 static const char *TAG = "simple_ota_example";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
@@ -79,16 +80,20 @@ void simple_ota_example_task(void *pvParameter)
         .event_handler = _http_event_handler,
     };
 
-    esp_err_t ret = esp_https_ota(&config);
+//    esp_err_t ret = esp_https_ota(&config);
     const esp_partition_t *updatePartition = esp_ota_get_next_update_partition(NULL);
 	esp_app_desc_t updatePartitionDesc;
 	esp_ota_get_partition_description(updatePartition, &updatePartitionDesc);
-	printf("current firmware version: %s\n", updatePartitionDesc.version);
-    if (ret == ESP_OK) {
-        esp_restart();
-    } else {
-        ESP_LOGE(TAG, "Firmware upgrade failed");
-    }
+	//printf("current firmware version: %s\n", updatePartitionDesc.version);
+	printf("%s\t%s\n", runningPartitionDesc.version, updatePartitionDesc.version);
+	if(strcmp(runningPartitionDesc.version, updatePartitionDesc.version)!=0){
+		esp_err_t ret = esp_https_ota(&config);
+		if (ret == ESP_OK) {
+			//esp_restart();
+		} else {
+			ESP_LOGE(TAG, "Firmware upgrade failed");
+		}
+	}
     while (1) {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
@@ -98,7 +103,6 @@ void simple_ota_example_task(void *pvParameter)
 void app_main(void)
 {
 	const esp_partition_t *runningPartition = esp_ota_get_running_partition();
-	esp_app_desc_t runningPartitionDesc;
 	esp_ota_get_partition_description(runningPartition, &runningPartitionDesc);
 	printf("current firmware version: %s\n", runningPartitionDesc.version);
 
